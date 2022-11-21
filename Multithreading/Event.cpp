@@ -3,15 +3,15 @@
 // https://learn.microsoft.com/en-us/windows/win32/sync/using-event-objects
 
 // Manual Reset Event: 
-// 1. It schedules all the threads waiting on an event ONCE the event gets signaled.
-// 2. When the state of a Manual reset event object is signaled, it remains signaled until it is explicitly 
+// 1. When a Manual Reset Event is signaled, all threads waiting on the event become schedulable.
+// 2. When the state of a Manual Reset Event object is signaled, it remains signaled until it is explicitly 
 //    reset to nonsignaled by the ResetEvent function. Any number of waiting threads, or threads that subsequently 
 //    begin wait operations for the specified event object, can be released while the object's state is signaled.
 
 // Auto Reset Event: 
-// 1. It schedules only one of the threads(we don't know which one) waiting on event once the event object gets signaled.
-// 2. When the state of an Auto reset event object is signaled, it remains signaled until a single waiting thread is released; 
-//    the system then automatically resets the state to nonsignaled.If no threads are waiting, the event object's state remains signaled.
+// 1. When an Auto Reset Event is signaled, only one of the threads waiting on the event becomes schedulable.
+// 2. When the state of an Auto Reset Event object is signaled, it remains signaled until a single waiting thread is released; 
+//    the system then automatically resets the state to nonsignaled. If no threads are waiting, the event object's state remains signaled.
 
 
 // This program creates two synchronized threads using events which print odd and even numbers respectively.
