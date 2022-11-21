@@ -4,12 +4,16 @@
 
 // Video: https://www.youtube.com/watch?v=_Cz1-kiBljA&list=PLhnN2F9NiVmAmMdwXEkpmSpBIogC8MqT6&index=6
 
-// CRITICAL SECTION is a user mode synchronization object 
-// i.e., this synchronization object can only synchronize the threads running under the same process.
-//
-// Recursion Count : How many times a thread has acquired a critical section objectand to the same number of times you need to release it i.e.you need to just : Leave the critical section those many times.
-//
-// Spin Count : The number of times the API TryEnterCriticalSection will poll the critical section object to find if it is available.
+// CRITICAL SECTION:
+// It is a user mode synchronization object i.e., this synchronization object can only synchronize 
+// the threads running under the same process.
+// 
+// Recursion Count: 
+// How many times a thread has acquired a critical section objectand to the same number of times you need to release it 
+// i.e.you need to just Leave the critical section those many times.
+// 
+// Spin Count: 
+// The number of times the API TryEnterCriticalSection will poll the critical section object to find if it is available.
 
 
 // This program creates two synchronized threads using CriticalSection which print odd and even numbers respectively.
