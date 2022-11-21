@@ -2,8 +2,17 @@
 // https://learn.microsoft.com/en-us/windows/win32/sync/event-objects
 // https://learn.microsoft.com/en-us/windows/win32/sync/using-event-objects
 
-// Manual Reset Event: It schedules all the threads waiting on an event ONCE the event gets signaled.
-// Auto Reset Event: It schedules only one of the threads(we don't know which one) waiting on event once the event object gets signaled.
+// Manual Reset Event: 
+// 1. It schedules all the threads waiting on an event ONCE the event gets signaled.
+// 2. When the state of a Manual reset event object is signaled, it remains signaled until it is explicitly 
+//    reset to nonsignaled by the ResetEvent function. Any number of waiting threads, or threads that subsequently 
+//    begin wait operations for the specified event object, can be released while the object's state is signaled.
+
+// Auto Reset Event: 
+// 1. It schedules only one of the threads(we don't know which one) waiting on event once the event object gets signaled.
+// 2. When the state of an Auto reset event object is signaled, it remains signaled until a single waiting thread is released; 
+//    the system then automatically resets the state to nonsignaled.If no threads are waiting, the event object's state remains signaled.
+
 
 // This program creates two synchronized threads using events which print odd and even numbers respectively.
 #include <windows.h>
@@ -37,13 +46,16 @@ unsigned int WINAPI ThreadOdd(PVOID pvParam)
 
 		if (WAIT_OBJECT_0 == dwRetVal)
 		{
+			// As EventEven is a Manual Reset Event, call ResetEvent to make it nonsignaled, so that no other thread's wait function (on EventEven) does not return.
+			// For Auto Reset Events, calling ResetEvent is not required.
+			ResetEvent(g_hEventEven);//EventEven is nonsignaled. Now ThreadOdd will wait until ThreadEven calls SetEvent(g_hEventEven).
+
 			if (1 == (g_iCount % 2))
 			{
 				printf("ThreadID:%d , Odd No : %d\n", GetCurrentThreadId(), g_iCount++);
 			}
 
-			ResetEvent(g_hEventEven);//Even Thread can begin only.
-			SetEvent(g_hEventOdd);//Odd Thread is signaled, i.e finished.
+			SetEvent(g_hEventOdd);//EventOdd is signaled. Now ThreadEven (who was waiting on EventOdd) will be scheduled.
 		}
 		else
 		{
@@ -58,23 +70,23 @@ unsigned int WINAPI ThreadOdd(PVOID pvParam)
 
 unsigned int WINAPI ThreadEven(PVOID pvParam)
 {
-	DWORD dwRetVal;
-
-	dwRetVal = 0;
+	DWORD dwRetVal = 0;
 
 	while (MAX_COUNT > g_iCount)
 	{
 		dwRetVal = WaitForSingleObject(g_hEventOdd, INFINITE);
-
 		if (WAIT_OBJECT_0 == dwRetVal)
 		{
+			// As EventOdd is a Manual Reset Event, call ResetEvent to make it nonsignaled, so that no other thread's wait function (on EventOdd) does not return.
+			// For Auto Reset Events, calling ResetEvent is not required.
+			ResetEvent(g_hEventOdd); //EventOdd is nonsignaled. Now ThreadEven will wait until ThreadOdd calls SetEvent(g_hEventOdd).
+
 			if (0 == (g_iCount % 2))
 			{
 				printf("ThreadID:%d , Even No: %d\n", GetCurrentThreadId(), g_iCount++);
 			}
 
-			ResetEvent(g_hEventOdd);
-			SetEvent(g_hEventEven);
+			SetEvent(g_hEventEven); //EventEven is signaled. Now ThreadOdd (who was waiting on EventEven) will be scheduled.
 		}
 		else
 		{
@@ -98,15 +110,17 @@ int main()
 	g_hEventOdd = CreateEvent(NULL, TRUE, FALSE, NULL);
 	if (NULL == g_hEventOdd)
 	{
-		printf("Event Creation Failed.\n");
+		printf("Odd Event Creation Failed.\n");
 		CloseHandle(g_hEventOdd);
 		return 1;
 	}
 
+
+	//Note that EvenEvent's initial state is set as signaled (3rd parameter is TRUE)
 	g_hEventEven = CreateEvent(NULL, TRUE, TRUE, NULL);
 	if (NULL == g_hEventEven)
 	{
-		printf("Event Creation Failed\n");
+		printf("Even Event Creation Failed\n");
 		CloseHandle(g_hEventEven);
 		return 1;
 	}

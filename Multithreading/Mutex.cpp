@@ -84,7 +84,7 @@ int main()
 	hThreads[0] = (HANDLE)_beginthreadex(NULL, 0, ThreadEven, NULL, 0, NULL);
 	if (NULL == hThreads[0])
 	{
-		printf("Thread1 can't be created.\n");
+		printf("ThreadEven can't be created.\n");
 		CloseHandle(hMutex);
 		return 0;
 	}
@@ -93,11 +93,11 @@ int main()
 	if (NULL == hThreads[1])
 	{
 		g_bTerminate = TRUE;
-		printf("\n Thread2 can't be created.\n");
+		printf("\n ThreadOdd can't be created.\n");
 		dwRetVal = WaitForSingleObject(hThreads[0], INFINITE);
 		if (WAIT_OBJECT_0 != dwRetVal)
 		{
-			printf("Wait for Odd Thread failed.\n");
+			printf("Wait for ThreadEven failed.\n");
 		}
 		CloseHandle(hThreads[0]);
 		CloseHandle(hMutex);
