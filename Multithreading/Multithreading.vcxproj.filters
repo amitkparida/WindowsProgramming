@@ -21,22 +21,22 @@
     <ClCompile Include="CreateThreads.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ConditionVariable.cpp">
+    <ClCompile Include="Multithreading\5 ConditionVariable.cpp">
       <Filter>Source Files\SynchronizationObjects</Filter>
     </ClCompile>
-    <ClCompile Include="CriticalSection.cpp">
+    <ClCompile Include="Multithreading\1 CriticalSection.cpp">
       <Filter>Source Files\SynchronizationObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Event.cpp">
+    <ClCompile Include="Multithreading\4 Event.cpp">
       <Filter>Source Files\SynchronizationObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Mutex.cpp">
+    <ClCompile Include="Multithreading\2 Mutex.cpp">
       <Filter>Source Files\SynchronizationObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Semaphore.cpp">
+    <ClCompile Include="Multithreading\3 Semaphore.cpp">
       <Filter>Source Files\SynchronizationObjects</Filter>
     </ClCompile>
-    <ClCompile Include="WaitableTimer.cpp">
+    <ClCompile Include="Multithreading\6 WaitableTimer.cpp">
       <Filter>Source Files\SynchronizationObjects</Filter>
     </ClCompile>
     <ClCompile Include="BridgeCrossing.cpp">
