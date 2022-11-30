@@ -2,11 +2,91 @@
 // https://learn.microsoft.com/en-us/windows/win32/sync/condition-variables
 // https://learn.microsoft.com/en-us/windows/win32/sync/using-condition-variables
 
-// Video: https://www.youtube.com/watch?v=CCEtDhlS_Y0&list=PLDpFwQfbVxIw_rysNCHPeGmh6wIUnhjrt&index=24
-
 // Note that, Condition variables are user-mode objects that cannot be shared across processes.
 
-//// The following code implements a producer/consumer queue. 
+// The following code implements a producer/consumer problem
+// Ref: https://www.youtube.com/watch?v=CCEtDhlS_Y0&list=PLDpFwQfbVxIw_rysNCHPeGmh6wIUnhjrt&index=24
+
+#include <windows.h>
+#include <iostream>
+using namespace std;
+
+CRITICAL_SECTION cs;
+CONDITION_VARIABLE cv;
+int buffer = 0;
+int max_items[20];
+
+DWORD WINAPI ProducerThread(LPVOID lpvoid) {
+	for (int i = 0; i < 20; i++) {
+		EnterCriticalSection(&cs);
+		while (buffer == 20) {
+			SleepConditionVariableCS(&cv, &cs, INFINITE);
+		}
+		buffer++;
+		cout << "Producer = " << buffer << endl;
+		Sleep(300);
+		LeaveCriticalSection(&cs);
+		WakeAllConditionVariable(&cv);
+	}
+
+	return 0;
+}
+
+DWORD WINAPI ConsumerThread(LPVOID lpvoid) {
+	for (int i = 0; i < 20; i++) {
+		EnterCriticalSection(&cs);
+		while (buffer == 0) {
+			SleepConditionVariableCS(&cv, &cs, INFINITE);
+		}
+		cout << "Consumer: " << buffer << endl;
+		Sleep(100);
+		buffer--;
+		LeaveCriticalSection(&cs);
+		WakeAllConditionVariable(&cv);
+
+	}
+
+	return 0;
+}
+
+int main() {
+	HANDLE hProducer, hConsumer;
+
+	InitializeCriticalSection(&cs);
+	InitializeConditionVariable(&cv);
+
+	hProducer = CreateThread(
+		NULL,
+		0,
+		&ProducerThread,
+		NULL,
+		0,
+		0
+	);
+
+	hConsumer = CreateThread(
+		NULL,
+		0,
+		&ConsumerThread,
+		NULL,
+		0,
+		0
+	);
+
+	WakeAllConditionVariable(&cv);
+
+	WaitForSingleObject(hProducer, INFINITE);
+	WaitForSingleObject(hConsumer, INFINITE);
+
+	system("PAUSE");
+}
+
+
+
+
+//// The following code implements a producer/consumer queue.
+//// Ref: https://learn.microsoft.com/en-us/windows/win32/sync/using-condition-variables
+// 
 //#include <windows.h>
 //#include <stdlib.h>
 //#include <stdio.h>
@@ -161,79 +241,6 @@
 
 
 
-#include <windows.h>
-#include <iostream>
-using namespace std;
-
-CRITICAL_SECTION cs;
-CONDITION_VARIABLE cv;
-int buffer = 0;
-int max_items[20];
-
-DWORD WINAPI ProducerThread(LPVOID lpvoid) {
-	for (int i = 0; i < 20; i++) {
-		EnterCriticalSection(&cs);
-		while (buffer == 20) {
-			SleepConditionVariableCS(&cv, &cs, INFINITE);
-		}
-		buffer++;
-		cout << "Producer = " << buffer << endl;
-		Sleep(300);
-		LeaveCriticalSection(&cs);
-		WakeAllConditionVariable(&cv);
-	}
-
-	return 0;
-}
-
-DWORD WINAPI ConsumerThread(LPVOID lpvoid) {
-	for (int i = 0; i < 20; i++) {
-		EnterCriticalSection(&cs);
-		while (buffer == 0) {
-			SleepConditionVariableCS(&cv, &cs, INFINITE);
-		}
-		cout << "Consumer: " << buffer << endl;
-		Sleep(100);
-		buffer--;
-		LeaveCriticalSection(&cs);
-		WakeAllConditionVariable(&cv);
-
-	}
-
-	return 0;
-}
-
-int main() {
-	HANDLE hProducer, hConsumer;
-
-	InitializeCriticalSection(&cs);
-	InitializeConditionVariable(&cv);
-
-	hProducer = CreateThread(
-		NULL, 
-		0,
-		&ProducerThread,
-		NULL,
-		0,
-		0
-	);
-
-	hConsumer = CreateThread(
-		NULL,
-		0,
-		&ConsumerThread,
-		NULL,
-		0,
-		0
-	);
-
-	WakeAllConditionVariable(&cv);
-
-	WaitForSingleObject(hProducer, INFINITE);
-	WaitForSingleObject(hConsumer, INFINITE);
-
-	system("PAUSE");
-}
 
 
 
