@@ -46,7 +46,7 @@ unsigned int WINAPI ThreadOdd(PVOID pvParam)
 
 		if (WAIT_OBJECT_0 == dwRetVal)
 		{
-			// As EventEven is a Manual Reset Event, call ResetEvent to make it nonsignaled, so that no other thread's wait function (on EventEven) does not return.
+			// As EventEven is a Manual Reset Event, call ResetEvent to make it nonsignaled, so that other thread's wait function (on EventEven) does not return.
 			// For Auto Reset Events, calling ResetEvent is not required.
 			ResetEvent(g_hEventEven);//EventEven is nonsignaled. Now ThreadOdd will wait until ThreadEven calls SetEvent(g_hEventEven).
 

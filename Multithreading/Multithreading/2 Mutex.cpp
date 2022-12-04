@@ -2,7 +2,7 @@
 // https://learn.microsoft.com/en-us/windows/win32/sync/mutex-objects
 // https://learn.microsoft.com/en-us/windows/win32/sync/using-mutex-objects
 
-// This program creates two synchronized threads using mutex which print oddand even numbers respectively.
+// This program creates two synchronized threads using mutex which print odd and even numbers respectively.
 #include <windows.h>
 #include <stdio.h>
 #include <process.h>

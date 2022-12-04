@@ -4,12 +4,14 @@
 
 
 // 1. Semaphore kernel objects are used for resource counting.
-// 2. They contain a usage count, as all kernel objects do, but they also contain two additional signed 32 - bit values: 
+// 2. They contain a usage count, as all kernel objects do, but they also contain two additional signed 32-bit values: 
 //    i. Maximum resource count (Maximum number of resources that the semaphore can control)
 //    ii. Current resource count (number of these resources that are currently available)
 // 
-// 3. If the current resource count is 0, the semaphore is nonsignaled.[Threads waiting to acquire the semaphore will be blocked]
-// 4. If the current resource count is greater than 0, the semaphore is signaled.[Threads waiting to acquire the semaphore will be readied/scheduled]
+// 3. If the current resource count is 0, the semaphore is nonsignaled.
+//    [Threads waiting to acquire the semaphore will be blocked]
+// 4. If the current resource count is greater than 0, the semaphore is signaled.
+//    [Threads waiting to acquire the semaphore will be readied/scheduled]
 // 5. The system never allows the current resource count to be negative. 
 // 6. The current resource count can never be greater than the maximum resource count.
 
