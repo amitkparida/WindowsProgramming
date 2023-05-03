@@ -54,5 +54,8 @@
     <ClCompile Include="ReaderWriter_MultiProcess.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SenderReceiverThreads.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
