@@ -9,9 +9,9 @@
 // the threads running under the same process.
 // 
 // Recursion Count: 
-// How many times a thread has acquired a critical section object and to the same number of times you need to release it 
-// i.e. you need to just Leave the critical section those many times.
-// 
+// This field contains the number of times that the owning thread has acquired this critical section. 
+// If this value is zero, the next thread that attempts to acquire the critical section will be successful.
+//
 // Spin Count: 
 // The number of times the API TryEnterCriticalSection will poll the critical section object to find if it is available.
 
