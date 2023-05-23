@@ -1,15 +1,17 @@
 
+// Mutex:
 // https://learn.microsoft.com/en-us/windows/win32/sync/mutex-objects
 // https://learn.microsoft.com/en-us/windows/win32/sync/using-mutex-objects
 
-//Recursive Mutex:
+//Recursive Mutex / Reentrant mutex: (C++ std::recursive_mutex)
 // A thread can acquire ownership of a mutex object that it already owns (recursive ownership), 
 // but a recursively acquired mutex object is not set to the Signaled state until the thread releases 
 // its ownership completely. Such a thread must explicitly release the mutex as many times as it acquired 
 // ownership before another thread can acquire the mutex.
 
-// Below code is example of cursive mutex usage. Single thread acquires the same mutex twice recursively.
-// There will be no deadlock.
+// Below code is example of cursive mutex usage. Single thread acquires the same mutex twice recursively 
+// without causing a deadlock.
+
 /* 
 void Fun1() {
 	mtx.lock();
