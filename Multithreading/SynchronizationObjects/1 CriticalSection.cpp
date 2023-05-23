@@ -9,7 +9,9 @@
 // the threads running under the same process.
 // 
 // Recursion Count: 
-// This field contains the number of times that the owning thread has acquired this critical section. 
+// CRITICAL_SECTION is recursive. After a thread has ownership of a critical section, it can make additional calls 
+// to EnterCriticalSection or TryEnterCriticalSection without blocking its execution.
+// Recursion Count is the number of times that the owning thread has acquired this critical section.
 // If this value is zero, the next thread that attempts to acquire the critical section will be successful.
 //
 // Spin Count: 
