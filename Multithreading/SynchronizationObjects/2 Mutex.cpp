@@ -9,6 +9,9 @@
 // its ownership completely. Such a thread must explicitly release the mutex as many times as it acquired 
 // ownership before another thread can acquire the mutex.
 
+// Where and Why to Use Recursive Mutexes :
+// https://www.youtube.com/watch?v=W5gtDo0bb7c
+
 // Below code is example of cursive mutex usage. Single thread acquires the same mutex twice recursively 
 // without causing a deadlock.
 
@@ -26,6 +29,7 @@ void Fun2() {
 */
 
 
+// Demo program to use Mutex
 // This program creates two synchronized threads using mutex which print odd and even numbers respectively.
 #include <windows.h>
 #include <stdio.h>
